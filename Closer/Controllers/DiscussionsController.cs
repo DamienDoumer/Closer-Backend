@@ -18,7 +18,7 @@ namespace Closer.Controllers
             var newUri = Url.Link("GetUnicDiscussion",
                 new { moniker = discussionModel.Moniker });
 
-            return Created("", new object());
+            return Created(newUri, discussionModel);
         }
 
         [HttpGet("{moniker}", Name = "GetUnicDiscussion")]

@@ -24,7 +24,7 @@ namespace Closer.Controllers
             var newUri = Url.Link("GetUnicMessage",
                 new { conversationMoniker = messageModel.ConversationMoniker, messageMoniker = messageModel.Moniker });
 
-            return Created("", new object());
+            return Created(newUri, messageModel);
         }
 
         [HttpGet("conversation/{conversationMoniker}/{messageMoniker}", Name = "GetUnicMessage")]
