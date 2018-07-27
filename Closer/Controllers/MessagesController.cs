@@ -11,6 +11,12 @@ namespace Closer.Controllers
     [Route("api/v1/messages")]
     public class MessagesController : Controller
     {
+        [HttpDelete("conversation/{conversationMoniker}/{messageMoniker}")]
+        async Task<IActionResult> Delete(string conversationMoniker, string messageMoniker)
+        {
+            return Ok();
+        }
+
         [HttpGet()]
         public IActionResult Get()
         {

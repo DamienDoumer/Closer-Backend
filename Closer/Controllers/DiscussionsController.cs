@@ -10,9 +10,15 @@ namespace Closer.Controllers
     [Route("api/v1/conversations")]
     public class DiscussionsController : Controller
     {
+        [HttpDelete("{moniker}")]
+        async Task<IActionResult> Delete(string moniker)
+        {
+            return Ok();
+        }
+
         [HttpPatch("{moniker}")]
         [HttpPut("{moniker}")]
-        IActionResult Put(string moniker, [FromBody]DiscussionModel discussionModel)
+        async Task<IActionResult> Put(string moniker, [FromBody]DiscussionModel discussionModel)
         {
             return Ok();
         }

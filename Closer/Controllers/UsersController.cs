@@ -9,11 +9,17 @@ namespace Closer.Controllers
 {
     [Route("api/v1/users")]
     public class UsersController : Controller
-    {
+    {         
+
+        [HttpDelete("{moniker}")]
+        async Task<IActionResult> Delete(string moniker)
+        {
+            return Ok();
+        }
 
         [HttpPatch("{moniker}")]
         [HttpPut("{moniker}")]
-        IActionResult Put(string moniker, [FromBody]UserModel userModel)
+        async Task<IActionResult> Put(string moniker, [FromBody]UserModel userModel)
         {
             return Ok();
         }
@@ -22,7 +28,7 @@ namespace Closer.Controllers
         public async Task<IActionResult> Post([FromBody]UserModel userModel)
         {
             //Create a new dynamic url for the new resource added.
-            var newUri = Url.Link("GetUnicDiscussion",
+            var newUri = Url.Link("GetUnicUser",
                 new { moniker = userModel.Moniker });
 
             return Created(newUri, userModel);
@@ -34,7 +40,7 @@ namespace Closer.Controllers
             return Ok("User Uno");
         }
 
-        [HttpGet("{moniker}", Name = "GetUnic)]
+        [HttpGet("{moniker}", Name = "GetUnicUser")]
         public IActionResult Get(string moniker, bool includeMessages = false, bool includeConversations = true)
         {
             try
@@ -48,6 +54,5 @@ namespace Closer.Controllers
 
             return BadRequest();
         }
-
     }
 }
