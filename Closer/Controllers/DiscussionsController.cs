@@ -10,6 +10,12 @@ namespace Closer.Controllers
     [Route("api/v1/conversations")]
     public class DiscussionsController : Controller
     {
+        [HttpPatch("{moniker}")]
+        [HttpPut("{moniker}")]
+        IActionResult Put(string moniker, [FromBody]DiscussionModel discussionModel)
+        {
+            return Ok();
+        }
 
         [HttpPost()]
         public async Task<IActionResult> Post([FromBody]DiscussionModel discussionModel)

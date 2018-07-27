@@ -10,6 +10,14 @@ namespace Closer.Controllers
     [Route("api/v1/users")]
     public class UsersController : Controller
     {
+
+        [HttpPatch("{moniker}")]
+        [HttpPut("{moniker}")]
+        IActionResult Put(string moniker, [FromBody]UserModel userModel)
+        {
+            return Ok();
+        }
+
         [HttpPost()]
         public async Task<IActionResult> Post([FromBody]UserModel userModel)
         {
