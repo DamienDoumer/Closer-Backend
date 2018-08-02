@@ -8,7 +8,7 @@ namespace Closer.Entities
     public class Discussion : BaseEntity
     {
         public string Title { get; set; }
-        public List<Message> Messages { get; set; }
-        public List<User> Users { get; set; }
+        public List<string> MessagesIds { get; set; }
+        public List<string> UserIds { get; set; }
     }
 }
