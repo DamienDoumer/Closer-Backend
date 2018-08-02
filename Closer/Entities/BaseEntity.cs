@@ -10,7 +10,7 @@ namespace Closer.Entities
     public class BaseEntity
     {
         [BsonId(IdGenerator = typeof(MyIDGenerator))]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [BsonElement("moniker")]
         public string Moniker { get; set; }
         public DateTime CreatedAt { get; set; }

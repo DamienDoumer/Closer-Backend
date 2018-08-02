@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataService\EF\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

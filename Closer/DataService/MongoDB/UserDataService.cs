@@ -55,7 +55,7 @@ namespace Closer.DataService.MongoDB
 
         public override async Task<User> ReadItemAsync(string id)
         {
-            var item = await Collection.FindAsync(i => i.Id == id);
+            var item = await Collection.FindAsync(i => i.Id.ToString() == id.ToString());
             return item.ToEnumerable().First();
         }
 
