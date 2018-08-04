@@ -8,7 +8,6 @@ namespace Closer.Entities
     public class Discussion : BaseEntity
     {
         public string Title { get; set; }
-        //public IEnumerable<string> MessagesIds { get; set; }
-        //public IEnumerable<string> UserIds { get; set; }
+        public string Description { get; set; }
     }
 }

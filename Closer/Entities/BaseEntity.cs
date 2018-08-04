@@ -2,6 +2,8 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +11,8 @@ namespace Closer.Entities
 {
     public class BaseEntity
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [BsonId(IdGenerator = typeof(MyIDGenerator))]
         public int Id { get; set; }
         [BsonElement("moniker")]

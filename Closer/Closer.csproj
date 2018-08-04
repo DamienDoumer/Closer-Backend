@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180804110003_CloserTestmigration.cs" />
+    <Compile Remove="Migrations\20180804110003_CloserTestmigration.Designer.cs" />
+    <Compile Remove="Migrations\20180804110445_CloserTestmigration.cs" />
+    <Compile Remove="Migrations\20180804110445_CloserTestmigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
