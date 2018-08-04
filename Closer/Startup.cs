@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Closer.DataService;
 using Closer.DataService.EF;
+using Closer.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -28,11 +30,19 @@ namespace Closer
             services.AddDbContext<CloserContext>(opt => 
                 opt.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
+            services.AddTransient<IDataService<User>>(x => 
+                new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+            services.AddTransient<IDataService<Discussion>>(x =>
+                new DiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+
+            //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+            //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.ReferenceLoopHandling = 
-                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
         }
 
