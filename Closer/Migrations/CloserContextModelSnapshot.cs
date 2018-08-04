@@ -27,6 +27,8 @@ namespace Closer.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("Description");
+
                     b.Property<string>("Moniker");
 
                     b.Property<string>("Title");
@@ -34,29 +36,6 @@ namespace Closer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Discussions");
-                });
-
-            modelBuilder.Entity("Closer.Entities.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("DiscussionId");
-
-                    b.Property<string>("InRespondToMessageID");
-
-                    b.Property<string>("Moniker");
-
-                    b.Property<string>("Text");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Closer.Entities.User", b =>
@@ -86,6 +65,9 @@ namespace Closer.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<int>("DiscussionId");
 
                     b.Property<string>("Moniker");
@@ -99,6 +81,21 @@ namespace Closer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserDiscussions");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("UserDiscussions");
+                });
+
+            modelBuilder.Entity("Closer.Entities.Message", b =>
+                {
+                    b.HasBaseType("Closer.Entities.UserDiscussions");
+
+                    b.Property<string>("InRespondToMessageID");
+
+                    b.Property<string>("Text");
+
+                    b.ToTable("Message");
+
+                    b.HasDiscriminator().HasValue("Message");
                 });
 
             modelBuilder.Entity("Closer.Entities.UserDiscussions", b =>
