@@ -21,7 +21,7 @@ namespace Closer.DataService.EF
 
         public async override Task<User> DeleteItemAsync(User item)
         {
-            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.UserId == item.Id));
+            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageUserId == item.Id));
             Context.Users.Remove(item);
             await Context.SaveChangesAsync();
 

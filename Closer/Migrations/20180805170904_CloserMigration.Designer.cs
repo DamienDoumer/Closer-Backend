@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Closer.Migrations
 {
     [DbContext(typeof(CloserContext))]
-    [Migration("20180805112009_CloserSecondFinalMigration")]
-    partial class CloserSecondFinalMigration
+    [Migration("20180805170904_CloserMigration")]
+    partial class CloserMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,21 +31,42 @@ namespace Closer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<int>("DiscussionUserCreatorId");
+
                     b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Moniker");
 
                     b.Property<string>("Title");
 
-                    b.Property<string>("UserCreatorId");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("UserCreatorId1");
+                    b.ToTable("Discussions");
+                });
+
+            modelBuilder.Entity("Closer.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("InRespondToMessageID");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("MessageDiscussionId");
+
+                    b.Property<int>("MessageUserId");
+
+                    b.Property<string>("Moniker");
+
+                    b.Property<string>("Text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserCreatorId1");
-
-                    b.ToTable("Discussions");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Closer.Entities.User", b =>
@@ -83,9 +104,6 @@ namespace Closer.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<int>("DiscussionId");
 
                     b.Property<bool>("IsDeleted");
@@ -96,67 +114,7 @@ namespace Closer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DiscussionId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("UserDiscussions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UserDiscussions");
-                });
-
-            modelBuilder.Entity("Closer.Entities.Message", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                b.Property<int>("DiscussionId");
-
-                b.Property<DateTime>("CreatedAt");
-
-                b.Property<int>("UserId");
-
-                b.Property<string>("InRespondToMessageID");
-
-                b.Property<string>("Text");
-
-                b.ToTable("Messages");
-
-                b.HasDiscriminator().HasValue("Message");
-            });
-
-            modelBuilder.Entity("Closer.Entities.Discussion", b =>
-                {
-                    b.HasOne("Closer.Entities.User", "UserCreator")
-                        .WithMany()
-                        .HasForeignKey("UserCreatorId1");
-                });
-
-            modelBuilder.Entity("Closer.Entities.Message", b =>
-            {
-                b.HasOne("Closer.Entities.Discussion", "Discussion")
-                    .WithMany()
-                    .HasForeignKey("DiscussionId")
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                b.HasOne("Closer.Entities.User", "User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity("Closer.Entities.UserDiscussion", b =>
-                {
-                    b.HasOne("Closer.Entities.Discussion", "Discussion")
-                        .WithMany()
-                        .HasForeignKey("DiscussionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Closer.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

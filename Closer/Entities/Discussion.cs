@@ -13,7 +13,6 @@ namespace Closer.Entities
         /// <summary>
         /// The user who created this discussion
         /// </summary>
-        public User DiscussionUserCreator { get; set; }
-        public string DiscussionUserCreatorId { get; set; }
+        public int DiscussionUserCreatorId { get; set; }
     }
 }

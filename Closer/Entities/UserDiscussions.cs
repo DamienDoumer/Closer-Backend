@@ -11,9 +11,7 @@ namespace Closer.Entities
     /// </summary>
     public class UserDiscussion : BaseEntity
     {
-        public User User { get; set; }
         public int UserId { get; set; }
-        public Discussion Discussion { get; set; }
         public int DiscussionId { get; set; }
     }
 }
