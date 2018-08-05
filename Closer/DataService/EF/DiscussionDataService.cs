@@ -13,74 +13,80 @@ namespace Closer.DataService.EF
         {
         }
 
-        public override Task CreateItemAsync(Discussion item)
+        public override async Task<Discussion> CreateItemAsync(Discussion item)
         {
-            return base.CreateItemAsync(item);
+            var user = await Context.Discussions.AddAsync(item);
+            await Context.SaveChangesAsync();
+
+            return item;
         }
 
-        public override Task<Discussion> DeleteItemAsync(Discussion item)
+        public async override Task<bool> DeleteItemAsync(Discussion item)
         {
-            return base.DeleteItemAsync(item);
+            var userDiscussion = Context.UserDiscussions.Where(x => x.DiscussionId == item.Id).ToList();
+            Context.UserDiscussions.RemoveRange(userDiscussion);
+
+            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageDiscussionId == item.Id));
+            Context.Discussions.Remove(item);
+            await Context.SaveChangesAsync();
+
+            return true;
         }
 
-        public override bool Equals(object obj)
+        public async override Task<long> GetCount()
         {
-            return base.Equals(obj);
+            return Context.Discussions.Count();
         }
 
-        public override Task<long> GetCount()
+        public async override Task InitializeAsync()
         {
-            return base.GetCount();
         }
 
-        public override int GetHashCode()
+        public async override Task<bool> PersonalizedDeleteQuery(Expression<Func<Discussion, bool>> predicate)
         {
-            return base.GetHashCode();
+            var items = Context.Discussions.Where(predicate);
+            Context.Discussions.RemoveRange(items);
+            await Context.SaveChangesAsync();
+
+            return true;
         }
 
-        public override Task InitializeAsync()
+        public override async Task<IEnumerable<Discussion>> PersonalizedQuery(Expression<Func<Discussion, bool>> predicate)
         {
-            return base.InitializeAsync();
+            return Context.Discussions.Where(predicate);
         }
 
-        public override Task<bool> PersonalizedDeleteQuery(Expression<Func<Discussion, bool>> predicate)
+        public async override Task<IEnumerable<Discussion>> ReadAllItemsAsync()
         {
-            return base.PersonalizedDeleteQuery(predicate);
+            return Context.Discussions.ToList();
         }
 
-        public override Task<IEnumerable<Discussion>> PersonalizedQuery(Expression<Func<Discussion, bool>> predicate)
+        /// <summary>
+        /// FInds a user with his id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override async Task<Discussion> ReadItemAsync(string id)
         {
-            return base.PersonalizedQuery(predicate);
+            return await Context.Discussions.FindAsync(id);
         }
 
-        public override Task<IEnumerable<Discussion>> ReadAllItemsAsync()
+        public async override Task<IEnumerable<Discussion>> ReadItemsAsync(int start)
         {
-            return base.ReadAllItemsAsync();
+            return Context.Discussions.ToList().Skip(start).Take(PAGE_SIZE);
         }
 
-        public override Task<Discussion> ReadItemAsync(string id)
+        public async override Task<Discussion> UpdateItem(Discussion item)
         {
-            return base.ReadItemAsync(id);
-        }
+            Context.Discussions.Update(item);
+            await Context.SaveChangesAsync();
 
-        public override Task<IEnumerable<Discussion>> ReadItemsAsync(int start)
-        {
-            return base.ReadItemsAsync(start);
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-
-        public override Task<Discussion> UpdateItem(Discussion item)
-        {
-            return base.UpdateItem(item);
+            return item;
         }
 
         public override Task<Discussion> UpsertItemAsync(Discussion item)
         {
-            return base.UpsertItemAsync(item);
+            throw new NotImplementedException();
         }
     }
 }

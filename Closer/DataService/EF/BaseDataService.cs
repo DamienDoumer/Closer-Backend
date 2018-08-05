@@ -17,12 +17,15 @@ namespace Closer.DataService.EF
             Context = context;
         }
 
-        public virtual Task CreateItemAsync(T item)
+        #region override 
+
+
+        public virtual Task<T> CreateItemAsync(T item)
         {
             throw new NotImplementedException();
         }
 
-        public virtual Task<T> DeleteItemAsync(T item)
+        public virtual Task<bool> DeleteItemAsync(T item)
         {
             throw new NotImplementedException();
         }
@@ -71,5 +74,9 @@ namespace Closer.DataService.EF
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+
     }
 }

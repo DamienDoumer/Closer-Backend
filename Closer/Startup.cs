@@ -34,9 +34,11 @@ namespace Closer
                 new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             services.AddTransient<IDataService<Discussion>>(x =>
                 new DiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+            services.AddTransient<ISingleDataService<UserDiscussion>>(x => 
+                new UserDiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
 
             var service = services.BuildServiceProvider().GetService<IDataService<User>>();
-            //await service.CreateItemAsync(new User { Name = "Shababo", Password = "123" });
+            await service.CreateItemAsync(new User { Name = "Rea Mera", Password = "1230aaa" });
 
             //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));

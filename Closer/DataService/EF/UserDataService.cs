@@ -13,19 +13,23 @@ namespace Closer.DataService.EF
         {
         }
 
-        public override async Task CreateItemAsync(User item)
+        public override async Task<User> CreateItemAsync(User item)
         {
             var user = await Context.Users.AddAsync(item);
             await Context.SaveChangesAsync();
+            return item;
         }
 
-        public async override Task<User> DeleteItemAsync(User item)
+        public async override Task<bool> DeleteItemAsync(User item)
         {
+            var userDiscussion = Context.UserDiscussions.Where(x => x.UserId == item.Id).ToList();
+            Context.UserDiscussions.RemoveRange(userDiscussion);
+
             Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageUserId == item.Id));
             Context.Users.Remove(item);
             await Context.SaveChangesAsync();
 
-            return item;
+            return true;
         }
 
         public async override Task<long> GetCount()
