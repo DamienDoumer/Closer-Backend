@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace Closer.Entities
 {
-    public class UserDiscussions : BaseEntity
+    /// <summary>
+    /// This entity is present just to establish 
+    /// Relation between user and discussions they belong to.
+    /// </summary>
+    public class UserDiscussion : BaseEntity
     {
         public User User { get; set; }
         public int UserId { get; set; }

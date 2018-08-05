@@ -4,14 +4,16 @@ using Closer.DataService.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Closer.Migrations
 {
     [DbContext(typeof(CloserContext))]
-    partial class CloserContextModelSnapshot : ModelSnapshot
+    [Migration("20180805112009_CloserSecondFinalMigration")]
+    partial class CloserSecondFinalMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +75,7 @@ namespace Closer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Closer.Entities.UserDiscussions", b =>
+            modelBuilder.Entity("Closer.Entities.UserDiscussion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,17 +106,25 @@ namespace Closer.Migrations
                 });
 
             modelBuilder.Entity("Closer.Entities.Message", b =>
-                {
-                    b.HasBaseType("Closer.Entities.UserDiscussions");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("InRespondToMessageID");
+                b.Property<int>("DiscussionId");
 
-                    b.Property<string>("Text");
+                b.Property<DateTime>("CreatedAt");
 
-                    b.ToTable("Message");
+                b.Property<int>("UserId");
 
-                    b.HasDiscriminator().HasValue("Message");
-                });
+                b.Property<string>("InRespondToMessageID");
+
+                b.Property<string>("Text");
+
+                b.ToTable("Messages");
+
+                b.HasDiscriminator().HasValue("Message");
+            });
 
             modelBuilder.Entity("Closer.Entities.Discussion", b =>
                 {
@@ -123,7 +133,20 @@ namespace Closer.Migrations
                         .HasForeignKey("UserCreatorId1");
                 });
 
-            modelBuilder.Entity("Closer.Entities.UserDiscussions", b =>
+            modelBuilder.Entity("Closer.Entities.Message", b =>
+            {
+                b.HasOne("Closer.Entities.Discussion", "Discussion")
+                    .WithMany()
+                    .HasForeignKey("DiscussionId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne("Closer.Entities.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity("Closer.Entities.UserDiscussion", b =>
                 {
                     b.HasOne("Closer.Entities.Discussion", "Discussion")
                         .WithMany()

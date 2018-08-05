@@ -18,5 +18,6 @@ namespace Closer.Entities
         [BsonElement("moniker")]
         public string Moniker { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

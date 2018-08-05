@@ -25,7 +25,7 @@ namespace Closer
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public async void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CloserContext>(opt => 
                 opt.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
@@ -34,6 +34,9 @@ namespace Closer
                 new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             services.AddTransient<IDataService<Discussion>>(x =>
                 new DiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+
+            var service = services.BuildServiceProvider().GetService<IDataService<User>>();
+            //await service.CreateItemAsync(new User { Name = "Shababo", Password = "123" });
 
             //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));

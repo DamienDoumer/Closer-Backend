@@ -9,5 +9,11 @@ namespace Closer.Entities
     {
         public string Title { get; set; }
         public string Description { get; set; }
+
+        /// <summary>
+        /// The user who created this discussion
+        /// </summary>
+        public User DiscussionUserCreator { get; set; }
+        public string DiscussionUserCreatorId { get; set; }
     }
 }

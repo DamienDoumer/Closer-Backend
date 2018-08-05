@@ -15,7 +15,7 @@ namespace Closer.DataService.EF
 
         public override async Task CreateItemAsync(User item)
         {
-            await Context.Users.AddAsync(item);
+            var user = await Context.Users.AddAsync(item);
             await Context.SaveChangesAsync();
         }
 

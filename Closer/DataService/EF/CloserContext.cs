@@ -12,7 +12,7 @@ namespace Closer.DataService.EF
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Discussion> Discussions { get; set; }
-        public DbSet<UserDiscussions> UserDiscussions { get; set; }
+        public DbSet<UserDiscussion> UserDiscussions { get; set; }
 
         public CloserContext(DbContextOptions options) : base(options)
         {
