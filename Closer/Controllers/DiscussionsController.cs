@@ -1,4 +1,5 @@
-﻿using Closer.Models;
+﻿using Closer.DataService;
+using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,13 @@ namespace Closer.Controllers
     [Route("api/v1/conversations")]
     public class DiscussionsController : Controller
     {
+        IDataService<DiscussionModel> _discussionDataService;
+
+        public DiscussionsController(IDataService<DiscussionModel> discussionDataService)
+        {
+            _discussionDataService = discussionDataService;
+        }
+
         [HttpDelete("{moniker}")]
         async Task<IActionResult> Delete(string moniker)
         {

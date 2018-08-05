@@ -1,4 +1,5 @@
-﻿using Closer.Entities;
+﻿using Closer.DataService;
+using Closer.Entities;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,15 @@ namespace Closer.Controllers
     [Route("api/v1/messages")]
     public class MessagesController : Controller
     {
+        IDataService<Message> _messageDataService;
+        IDataService<Discussion> _duscussionDataService;
+
+        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService)
+        {
+            _duscussionDataService = discussionDataService;
+            _messageDataService = messageDataService;
+        }
+
         [HttpDelete("conversation/{conversationMoniker}/{messageMoniker}")]
         async Task<IActionResult> Delete(string conversationMoniker, string messageMoniker)
         {
@@ -40,7 +50,7 @@ namespace Closer.Controllers
         }
 
         [HttpGet("conversation/{moniker}")]
-        public IActionResult Get(string moniker)
+        public IActionResult Get(string moniker, int fromNumber)
         {
             try
             {

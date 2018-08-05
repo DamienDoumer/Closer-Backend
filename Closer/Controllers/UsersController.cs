@@ -1,4 +1,6 @@
-﻿using Closer.Models;
+﻿using Closer.DataService;
+using Closer.Entities;
+using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,15 @@ namespace Closer.Controllers
 {
     [Route("api/v1/users")]
     public class UsersController : Controller
-    {         
+    {
+        IDataService<User> _userDataService;
+        IDataService<UserDiscussion> _userDiscussionDataService;
+
+        public UsersController(IDataService<User> userDataService, IDataService<UserDiscussion> userDiscussionDataService)
+        {
+            _userDataService = userDataService;
+            _userDiscussionDataService = userDiscussionDataService;
+        }
 
         [HttpDelete("{moniker}")]
         async Task<IActionResult> Delete(string moniker)

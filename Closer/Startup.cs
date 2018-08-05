@@ -36,6 +36,8 @@ namespace Closer
                 new DiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             services.AddTransient<ISingleDataService<UserDiscussion>>(x => 
                 new UserDiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+            services.AddTransient<IDataService<Message>>(x =>
+                new MessageDataService(services.BuildServiceProvider().GetService<CloserContext>()));
 
             var service = services.BuildServiceProvider().GetService<IDataService<User>>();
             await service.CreateItemAsync(new User { Name = "Rea Mera", Password = "1230aaa" });

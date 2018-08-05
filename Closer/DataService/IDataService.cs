@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Closer.DataService
 {
-    interface IDataService<T> : ISingleDataService<T>
+    public interface IDataService<T> : ISingleDataService<T>
     {
         Task<T> CreateItemAsync(T item);
         Task<T> UpsertItemAsync(T item);
