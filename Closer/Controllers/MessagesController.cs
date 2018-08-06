@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Closer.Controllers
 {
     [Route("api/v1/messages")]
-    public class MessagesController : Controller
+    public class MessagesController : BaseController
     {
         IDataService<Message> _messageDataService;
         IDataService<Discussion> _duscussionDataService;

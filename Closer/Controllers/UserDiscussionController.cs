@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Closer.Controllers
 {
     [Route("api/v1/user_discussion")]
-    public class UserDiscussionController : Controller
+    public class UserDiscussionController : BaseController
     {
         [HttpGet()]
         public IActionResult Get()

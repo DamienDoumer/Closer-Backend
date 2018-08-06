@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Closer.Controllers
 {
     [Route("api/v1/users")]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         IDataService<User> _userDataService;
         IDataService<UserDiscussion> _userDiscussionDataService;
