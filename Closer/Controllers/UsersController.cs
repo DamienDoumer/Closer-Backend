@@ -1,4 +1,5 @@
-﻿using Closer.DataService;
+﻿using AutoMapper;
+using Closer.DataService;
 using Closer.Entities;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,13 @@ namespace Closer.Controllers
     {
         IDataService<User> _userDataService;
         IDataService<UserDiscussion> _userDiscussionDataService;
+        IMapper _mapper;
 
-        public UsersController(IDataService<User> userDataService, IDataService<UserDiscussion> userDiscussionDataService)
+        public UsersController(IDataService<User> userDataService, 
+            IDataService<UserDiscussion> userDiscussionDataService,
+            IMapper mapper)
         {
+            _mapper = mapper;
             _userDataService = userDataService;
             _userDiscussionDataService = userDiscussionDataService;
         }
@@ -39,7 +44,7 @@ namespace Closer.Controllers
         {
             //Create a new dynamic url for the new resource added.
             var newUri = Url.Link("GetUnicUser",
-                new { moniker = userModel.Moniker });
+                new { moniker = userModel.ID });
 
             return Created(newUri, userModel);
         }

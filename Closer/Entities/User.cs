@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,5 +13,8 @@ namespace Closer.Entities
         public string Password { get; set; }
         public string Email { get; set; }
         public string Bio { get; set; }
+
+        [NotMapped]
+        public List<Discussion> Discussions { get; set; }
     }
 }

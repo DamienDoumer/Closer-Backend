@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Closer.DataService;
 using Closer.DataService.EF;
 using Closer.Entities;
@@ -27,6 +28,7 @@ namespace Closer
         // This method gets called by the runtime. Use this method to add services to the container.
         public async void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper();
             services.AddDbContext<CloserContext>(opt => 
                 opt.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
@@ -39,11 +41,8 @@ namespace Closer
             services.AddTransient<IDataService<Message>>(x =>
                 new MessageDataService(services.BuildServiceProvider().GetService<CloserContext>()));
 
-            var service = services.BuildServiceProvider().GetService<IDataService<User>>();
-            await service.CreateItemAsync(new User { Name = "Rea Mera", Password = "1230aaa" });
-
-            //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
-            //services.AddTransient<IDataService<User>>(x => new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
+            //var service = services.BuildServiceProvider().GetService<IDataService<User>>();
+            //await service.CreateItemAsync(new User { Name = "Rea Mera", Password = "1230aaa" });
 
             services.AddMvc()
                 .AddJsonOptions(opt =>

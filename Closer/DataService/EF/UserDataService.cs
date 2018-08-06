@@ -15,6 +15,7 @@ namespace Closer.DataService.EF
 
         public override async Task<User> CreateItemAsync(User item)
         {
+            item.CreatedAt = DateTime.Now;
             var user = await Context.Users.AddAsync(item);
             await Context.SaveChangesAsync();
             return item;
@@ -22,7 +23,7 @@ namespace Closer.DataService.EF
 
         public async override Task<bool> DeleteItemAsync(User item)
         {
-            var userDiscussion = Context.UserDiscussions.Where(x => x.UserId == item.Id).ToList();
+            var userDiscussion = Context.UserDiscussions.Where(x => x.UserId == item.Id);
             Context.UserDiscussions.RemoveRange(userDiscussion);
 
             Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageUserId == item.Id));
@@ -67,7 +68,15 @@ namespace Closer.DataService.EF
         /// <returns></returns>
         public override async Task<User> ReadItemAsync(string id)
         {
-            return await Context.Users.FindAsync(id);
+            User user = await Context.Users.FindAsync(id);
+
+            var intId = Convert.ToInt32(id);
+
+            var userDiscussions = from ud in Context.UserDiscussions where ud.UserId == intId select ud;
+            var discussions = from d in Context.Discussions join ud in userDiscussions on d.Id equals ud.DiscussionId select d;   
+            user.Discussions = discussions.ToList();
+
+            return user;
         }
 
         public async override Task<IEnumerable<User>> ReadItemsAsync(int start)
