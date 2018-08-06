@@ -17,6 +17,8 @@ namespace Closer.Entities
         public int DiscussionUserCreatorId { get; set; }
 
         [NotMapped]
+        public User Creator { get; set; }
+        [NotMapped]
         public List<User> Users { get; set; }
     }
 }

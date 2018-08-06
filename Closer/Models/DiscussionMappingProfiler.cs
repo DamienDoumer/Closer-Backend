@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Closer.Models
 {
-    public class UserMappingProfiler : Profile
+    public class DiscussionMappingProfiler : Profile
     {
-        public UserMappingProfiler()
+        public DiscussionMappingProfiler()
         {
-            CreateMap<User, UserModel>()
+            CreateMap<Discussion, DiscussionModel>()
                 .ForMember(c => c.ID, opt => opt.MapFrom(u => u.Moniker));
         }
     }

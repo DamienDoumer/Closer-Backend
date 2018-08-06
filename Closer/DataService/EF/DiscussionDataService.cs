@@ -73,10 +73,11 @@ namespace Closer.DataService.EF
         {
             var item = await Context.Discussions.FindAsync(id);
 
+            var creator = await Context.Users.FindAsync(item.DiscussionUserCreatorId);
             var userDiscussions = Context.UserDiscussions.Where(i => i.DiscussionId.ToString() == id);
             
             var users = from usrs in Context.Users join ud in userDiscussions on usrs.Id equals ud.UserId select usrs;
-
+            item.Creator = creator;
             item.Users = users.ToList();
             return item;
         }

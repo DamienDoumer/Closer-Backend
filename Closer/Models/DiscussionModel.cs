@@ -9,11 +9,9 @@ namespace Closer.Models
     {
         public string Title { get; set; }
         public string Description { get; set; }
-
-        /// <summary>
-        /// The user who created this discussion
-        /// </summary>
-        public UserModel Creator { get; set; }
+        public string CreatorName { get; set; }
+        public string CreatorEmail { get; set; }
+        public string CreatorPseudo { get; set; }
 
         /// <summary>
         /// Users who are in this discussion
