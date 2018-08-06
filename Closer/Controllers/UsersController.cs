@@ -50,13 +50,13 @@ namespace Closer.Controllers
         }
 
         [HttpGet()]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok("User Uno");
+           var items = await _userDataService.ReadAllItemsAsync();
         }
 
         [HttpGet("{moniker}", Name = "GetUnicUser")]
-        public IActionResult Get(string moniker, bool includeMessages = false, bool includeConversations = true)
+        public IActionResult Get(string moniker, bool includeDiscussions = true)
         {
             try
             {

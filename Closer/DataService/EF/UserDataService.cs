@@ -10,8 +10,7 @@ namespace Closer.DataService.EF
     public class UserDataService : BaseDataService<User>
     {
         public UserDataService(CloserContext context) : base(context)
-        {
-        }
+        { }
 
         public override async Task<User> CreateItemAsync(User item)
         {
@@ -70,11 +69,14 @@ namespace Closer.DataService.EF
         {
             User user = await Context.Users.FindAsync(id);
 
-            var intId = Convert.ToInt32(id);
+            if (user != null)
+            {
+                var intId = Convert.ToInt32(id);
 
-            var userDiscussions = from ud in Context.UserDiscussions where ud.UserId == intId select ud;
-            var discussions = from d in Context.Discussions join ud in userDiscussions on d.Id equals ud.DiscussionId select d;   
-            user.Discussions = discussions.ToList();
+                var userDiscussions = from ud in Context.UserDiscussions where ud.UserId == intId select ud;
+                var discussions = from d in Context.Discussions join ud in userDiscussions on d.Id equals ud.DiscussionId select d;
+                user.Discussions = discussions.ToList();
+            }
 
             return user;
         }

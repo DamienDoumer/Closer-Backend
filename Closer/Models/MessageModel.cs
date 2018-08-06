@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Closer.Models
 {
-    public class MessageModel
+    public class MessageModel : BaseModel
     {
         public string ConversationMoniker { get; set; }
         public string Moniker { get; set; }
