@@ -7,7 +7,8 @@ namespace Closer.Models
 {
     public class BaseModel
     {
-        public string Url { get; set; }
+        //public string Url { get; set; }
+
         /// <summary>
         /// Represents the Entity's moniker
         /// </summary>

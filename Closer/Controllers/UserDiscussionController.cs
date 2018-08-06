@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Closer.Filters;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Closer.Controllers
 {
+    [ValidateModel]
     [Route("api/v1/user_discussion")]
     public class UserDiscussionController : BaseController
     {

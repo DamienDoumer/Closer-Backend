@@ -12,8 +12,7 @@ namespace Closer.Models
         public CloserMappingProfiler()
         {
             CreateMap<BaseEntity, BaseModel>()
-                .ForMember(bm => bm.ID, opt => opt.MapFrom(be => be.Moniker))
-                .ForMember(bm => bm.Url, opt => opt.MapFrom(be => $""));
+                .ForMember(bm => bm.ID, opt => opt.MapFrom(be => be.Moniker));
 
             CreateMap<Message, MessageModel>()
                 .IncludeBase<BaseEntity, BaseModel>();

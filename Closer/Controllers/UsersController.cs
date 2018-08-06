@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Closer.DataService;
 using Closer.Entities;
+using Closer.Filters;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Closer.Controllers
 {
+    [ValidateModel]
     [Route("api/v1/users")]
     public class UsersController : BaseController
     {
