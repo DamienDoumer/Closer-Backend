@@ -11,14 +11,22 @@ namespace Closer.Models
     {
         public CloserMappingProfiler()
         {
+            CreateMap<BaseEntity, BaseModel>()
+                .ForMember(bm => bm.ID, opt => opt.MapFrom(be => be.Moniker))
+                .ForMember(bm => bm.Url, opt => opt.MapFrom(be => $""));
+
             CreateMap<Message, MessageModel>()
-                .ForMember(c => c.ID, opt => opt.MapFrom(u => u.Moniker));
+                .IncludeBase<BaseEntity, BaseModel>();
+
+            CreateMap<Message, MessageModel>()
+                .IncludeBase<BaseEntity, BaseModel>();
 
             CreateMap<User, UserModel>()
-                .ForMember(c => c.ID, opt => opt.MapFrom(u => u.Moniker));
+                .IncludeBase<BaseEntity, BaseModel>();
 
             CreateMap<Discussion, DiscussionModel>()
-                .ForMember(c => c.ID, opt => opt.MapFrom(u => u.Moniker));
+                .IncludeBase<BaseEntity, BaseModel>();
+
         }
     }
 }

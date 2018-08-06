@@ -26,7 +26,5 @@ namespace Closer.Controllers
         {
             return Ok();
         }
-
-
     }
 }
