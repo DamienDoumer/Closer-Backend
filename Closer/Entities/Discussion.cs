@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,5 +15,8 @@ namespace Closer.Entities
         /// The user who created this discussion
         /// </summary>
         public int DiscussionUserCreatorId { get; set; }
+
+        [NotMapped]
+        public List<User> Users { get; set; }
     }
 }

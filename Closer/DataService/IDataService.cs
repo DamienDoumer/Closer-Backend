@@ -8,7 +8,6 @@ namespace Closer.DataService
 {
     public interface IDataService<T> : ISingleDataService<T>
     {
-        Task<T> CreateItemAsync(T item);
         Task<T> UpsertItemAsync(T item);
         Task<bool> DeleteItemAsync(T item);
         Task<IEnumerable<T>> ReadAllItemsAsync();

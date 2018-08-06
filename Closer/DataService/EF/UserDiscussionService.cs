@@ -29,5 +29,13 @@ namespace Closer.DataService.EF
 
             return true;
         }
+        public async Task<UserDiscussion> CreateItemAsync(UserDiscussion item)
+        {
+            item.CreatedAt = DateTime.Now;
+            await Context.UserDiscussions.AddAsync(item);
+            await Context.SaveChangesAsync();
+
+            return item;
+        }
     }
 }

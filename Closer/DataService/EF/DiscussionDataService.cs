@@ -15,7 +15,10 @@ namespace Closer.DataService.EF
 
         public override async Task<Discussion> CreateItemAsync(Discussion item)
         {
-            var user = await Context.Discussions.AddAsync(item);
+            item.CreatedAt = DateTime.Now;
+            Context.Discussions.Add(item);
+            await Context.SaveChangesAsync();
+            Context.UserDiscussions.Add(new UserDiscussion { DiscussionId = item.Id, UserId = item.DiscussionUserCreatorId, CreatedAt = DateTime.Now });
             await Context.SaveChangesAsync();
 
             return item;
@@ -68,7 +71,14 @@ namespace Closer.DataService.EF
         /// <returns></returns>
         public override async Task<Discussion> ReadItemAsync(string id)
         {
-            return await Context.Discussions.FindAsync(id);
+            var item = await Context.Discussions.FindAsync(id);
+
+            var userDiscussions = Context.UserDiscussions.Where(i => i.DiscussionId.ToString() == id);
+            
+            var users = from usrs in Context.Users join ud in userDiscussions on usrs.Id equals ud.UserId select usrs;
+
+            item.Users = users.ToList();
+            return item;
         }
 
         public async override Task<IEnumerable<Discussion>> ReadItemsAsync(int start)

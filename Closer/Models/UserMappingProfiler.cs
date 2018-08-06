@@ -11,8 +11,7 @@ namespace Closer.Models
     {
         public UserMappingProfiler()
         {
-            CreateMap<User, UserModel>()
-                .ForMember(c => c.ID, opt => opt.MapFrom(u => u.Moniker));
+            CreateMap<User, UserModel>();
         }
     }
 }

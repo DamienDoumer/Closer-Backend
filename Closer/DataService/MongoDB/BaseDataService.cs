@@ -28,7 +28,7 @@ namespace Closer.DataService.MongoDB
                 });
         }
 
-        public virtual Task CreateItemAsync(T item)
+        public virtual Task<T> CreateItemAsync(T item)
         {
             throw new NotImplementedException();
         }
@@ -80,6 +80,11 @@ namespace Closer.DataService.MongoDB
         }
 
         public virtual Task<long> GetCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IDataService<T>.DeleteItemAsync(T item)
         {
             throw new NotImplementedException();
         }

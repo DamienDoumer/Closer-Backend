@@ -11,5 +11,6 @@ namespace Closer.Models
         /// Represents the Entity's moniker
         /// </summary>
         public string ID { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

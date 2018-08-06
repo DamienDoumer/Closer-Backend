@@ -15,9 +15,11 @@ namespace Closer.DataService.MongoDB
             Collection = Database.GetCollection<User>(nameof(User));
         }
 
-        public override async Task CreateItemAsync(User item)
+        public override async Task<User> CreateItemAsync(User item)
         {
             await Collection.InsertOneAsync(item);
+
+            return item;
         }
 
         public override async Task<User> DeleteItemAsync(User item)

@@ -36,7 +36,7 @@ namespace Closer.Controllers
         {
             //Create a new dynamic url for the new resource added.
             var newUri = Url.Link("GetUnicDiscussion",
-                new { moniker = discussionModel.Moniker });
+                new { moniker = discussionModel.ID });
 
             return Created(newUri, discussionModel);
         }
