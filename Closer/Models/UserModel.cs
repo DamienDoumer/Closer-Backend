@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 
 namespace Closer.Models
 {
-    public class UserModel
+    public class UserModel : BaseModel
     {
-        public string Moniker { get; set; }
+        public string Name { get; set; }
+        public string Pseudo { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public string Bio { get; set; }
+
+        public List<DiscussionModel> Discussions { get; set; }
     }
 }

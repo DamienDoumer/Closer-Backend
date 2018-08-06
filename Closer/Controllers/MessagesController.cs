@@ -50,7 +50,7 @@ namespace Closer.Controllers
         }
 
         [HttpGet("conversation/{moniker}")]
-        public IActionResult Get(string moniker, int fromNumber)
+        public IActionResult Get(string moniker, int fromNumber = 0)
         {
             try
             {
