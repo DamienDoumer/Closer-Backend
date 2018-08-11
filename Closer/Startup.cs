@@ -64,8 +64,11 @@ namespace Closer
             services.AddMvc()
                 .AddJsonOptions(opt =>
                 {
+                    //The best Json serializer settings 
                     opt.SerializerSettings.ReferenceLoopHandling = 
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    opt.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 });
         }
 

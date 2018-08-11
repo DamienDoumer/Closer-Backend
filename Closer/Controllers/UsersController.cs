@@ -16,11 +16,11 @@ namespace Closer.Controllers
     public class UsersController : BaseController
     {
         IDataService<User> _userDataService;
-        IDataService<UserDiscussion> _userDiscussionDataService;
+        ISingleDataService<UserDiscussion> _userDiscussionDataService;
         IMapper _mapper;
 
         public UsersController(IDataService<User> userDataService, 
-            IDataService<UserDiscussion> userDiscussionDataService,
+            ISingleDataService<UserDiscussion> userDiscussionDataService,
             IMapper mapper)
         {
             _mapper = mapper;
@@ -54,15 +54,29 @@ namespace Closer.Controllers
         [HttpGet()]
         public async Task<IActionResult> Get()
         {
-           var items = await _userDataService.ReadAllItemsAsync();
+            try
+            {
+                var items = await _userDataService.ReadAllItemsAsync();
+                return Ok(_mapper.Map<IEnumerable<UserModel>>(items));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpGet("{moniker}", Name = "GetUnicUser")]
-        public IActionResult Get(string moniker, bool includeDiscussions = true)
+        public async Task<IActionResult> Get(string moniker)
         {
             try
             {
-                Ok("User Uno");
+                var item = await _userDataService.ReadItemAsync(moniker);
+                if(item != null)
+                {
+                    return Ok(_mapper.Map<UserModel>(item));
+                }
+
+                return NotFound();
             }
             catch (Exception e)
             {
