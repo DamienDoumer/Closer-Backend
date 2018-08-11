@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,7 +25,10 @@ namespace Closer.Models
         [MaxLength(2000)]
         [Required]
         public string Bio { get; set; }
+        
+        public string Password { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<DiscussionModel> Discussions { get; set; }
     }
 }

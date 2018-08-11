@@ -44,11 +44,23 @@ namespace Closer.Controllers
         [HttpPost()]
         public async Task<IActionResult> Post([FromBody]UserModel userModel)
         {
-            //Create a new dynamic url for the new resource added.
-            var newUri = Url.Link("GetUnicUser",
-                new { moniker = userModel.ID });
+            try
+            {
+                var userEntity = _mapper.Map<User>(userModel);
+                await _userDataService.CreateItemAsync(userEntity);
 
-            return Created(newUri, userModel);
+                //Create a new dynamic url for the new resource added.
+                var newUri = Url.Link("GetUnicUser",
+                    new { moniker = userEntity.Id });
+
+
+                return Created(newUri, userModel);
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpGet()]
