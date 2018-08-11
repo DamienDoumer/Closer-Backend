@@ -29,16 +29,45 @@ namespace Closer.Controllers
         }
 
         [HttpDelete("{moniker}")]
-        async Task<IActionResult> Delete(string moniker)
+        public async Task<IActionResult> Delete(string moniker)
         {
+
             return Ok();
         }
 
         [HttpPatch("{moniker}")]
         [HttpPut("{moniker}")]
-        async Task<IActionResult> Put(string moniker, [FromBody]UserModel userModel)
+        public async Task<IActionResult> Put(string moniker, [FromBody]UserModel userModel)
         {
-            return Ok();
+            try
+            {
+                var user = await _userDataService.ReadItemAsync(moniker);
+
+                if (user != null)
+                {
+                    var newUser = _mapper.Map<User>(userModel);
+
+                    user.Name = userModel.Name ?? user.Name;
+                    user.Pseudo = userModel.Pseudo ?? user.Pseudo;
+                    user.Bio = userModel.Bio ?? user.Bio;
+                    user.Email = userModel.Email ?? user.Email;
+                    user.Password = userModel.Password ?? user.Password;
+
+                    await _userDataService.UpdateItem(user);
+
+                    return Ok(user);
+                }
+                else
+                {
+                    return NotFound($"The user with ID : {userModel.ID} could not be found.");
+                }
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest("Couldn't update user.");
         }
 
         [HttpPost()]
@@ -52,8 +81,7 @@ namespace Closer.Controllers
                 //Create a new dynamic url for the new resource added.
                 var newUri = Url.Link("GetUnicUser",
                     new { moniker = userEntity.Id });
-
-
+                
                 return Created(newUri, userModel);
 
             }
