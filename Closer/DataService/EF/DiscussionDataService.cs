@@ -71,7 +71,7 @@ namespace Closer.DataService.EF
         /// <returns></returns>
         public override async Task<Discussion> ReadItemAsync(string id)
         {
-            var item = await Context.Discussions.FindAsync(id);
+            var item = await Context.Discussions.FindAsync(Convert.ToInt32(id));
 
             var creator = await Context.Users.FindAsync(item.DiscussionUserCreatorId);
             var userDiscussions = Context.UserDiscussions.Where(i => i.DiscussionId.ToString() == id);

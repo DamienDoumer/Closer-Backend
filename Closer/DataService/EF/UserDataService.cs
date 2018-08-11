@@ -67,7 +67,7 @@ namespace Closer.DataService.EF
         /// <returns></returns>
         public override async Task<User> ReadItemAsync(string id)
         {
-            User user = await Context.Users.FindAsync(id);
+            User user = await Context.Users.FindAsync(Convert.ToInt32(id));
 
             if (user != null)
             {

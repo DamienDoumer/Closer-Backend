@@ -57,7 +57,8 @@ namespace Closer.Controllers
             try
             {
                 var items = await _userDataService.ReadAllItemsAsync();
-                return Ok(_mapper.Map<IEnumerable<UserModel>>(items));
+                var users = _mapper.Map<IEnumerable<UserModel>>(items);
+                return Ok(users);
             }
             catch (Exception e)
             {
@@ -80,10 +81,8 @@ namespace Closer.Controllers
             }
             catch (Exception e)
             {
-                ;
+                return StatusCode(500);
             }
-
-            return BadRequest();
         }
     }
 }

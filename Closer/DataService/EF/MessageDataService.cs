@@ -59,7 +59,7 @@ namespace Closer.DataService.EF
 
         public async override Task<Message> ReadItemAsync(string id)
         {
-            return await Context.Messages.FindAsync(id);
+            return await Context.Messages.FindAsync(Convert.ToInt32(id));
         }
 
         public async override Task<IEnumerable<Message>> ReadItemsAsync(int start)
