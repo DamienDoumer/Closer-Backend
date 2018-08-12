@@ -28,6 +28,8 @@ namespace Closer.Models
         [Required]
         public string CreatorPseudo { get; set; }
 
+        public int CreatorId { get; set; }
+
         /// <summary>
         /// Users who are in this discussion
         /// </summary>

@@ -16,9 +16,19 @@ namespace Closer.DataService.EF
         public override async Task<Discussion> CreateItemAsync(Discussion item)
         {
             item.CreatedAt = DateTime.Now;
-            Context.Discussions.Add(item);
+            var creator = item.Creator;
+
+            if ((await Context.Users.FindAsync(creator.Id)) == null)
+                throw new Exception("The user creating this discussion was not found");
+
+            item.DiscussionUserCreatorId = creator.Id;
+            item.Users = new List<User> { creator };
+
+            item.Creator = null;
+            await Context.Discussions.AddAsync(item);
             await Context.SaveChangesAsync();
-            Context.UserDiscussions.Add(new UserDiscussion { DiscussionId = item.Id, UserId = item.DiscussionUserCreatorId, CreatedAt = DateTime.Now });
+            Context.UserDiscussions.Add(
+                new UserDiscussion { DiscussionId = item.Id, UserId = item.DiscussionUserCreatorId, CreatedAt = DateTime.Now });
             await Context.SaveChangesAsync();
 
             return item;
@@ -73,12 +83,16 @@ namespace Closer.DataService.EF
         {
             var item = await Context.Discussions.FindAsync(Convert.ToInt32(id));
 
-            var creator = await Context.Users.FindAsync(item.DiscussionUserCreatorId);
-            var userDiscussions = Context.UserDiscussions.Where(i => i.DiscussionId.ToString() == id);
-            
-            var users = from usrs in Context.Users join ud in userDiscussions on usrs.Id equals ud.UserId select usrs;
-            item.Creator = creator;
-            item.Users = users.ToList();
+            if (item != null)
+            {
+                var creator = await Context.Users.FindAsync(item.DiscussionUserCreatorId);
+                var userDiscussions = Context.UserDiscussions.Where(i => i.DiscussionId.ToString() == id);
+
+                var users = from usrs in Context.Users join ud in userDiscussions on usrs.Id equals ud.UserId select usrs;
+                item.Creator = creator;
+                item.Users = users.ToList();
+            }
+
             return item;
         }
 

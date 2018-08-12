@@ -31,8 +31,21 @@ namespace Closer.Controllers
         [HttpDelete("{moniker}")]
         public async Task<IActionResult> Delete(string moniker)
         {
+            try
+            {
+                var user = await _userDataService.ReadItemAsync(moniker);
 
-            return Ok();
+                if (user != null) return NotFound();
+
+                await _userDataService.DeleteItemAsync(user);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest("An error occured when deleting this user.");
         }
 
         [HttpPatch("{moniker}")]
@@ -81,7 +94,8 @@ namespace Closer.Controllers
                 //Create a new dynamic url for the new resource added.
                 var newUri = Url.Link("GetUnicUser",
                     new { moniker = userEntity.Id });
-                
+
+                userModel.ID = userEntity.Moniker;
                 return Created(newUri, userModel);
 
             }
@@ -102,7 +116,7 @@ namespace Closer.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return BadRequest();
             }
         }
 

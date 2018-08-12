@@ -23,13 +23,17 @@ namespace Closer.Models
 
 
             CreateMap<Discussion, DiscussionModel>()
-                .IncludeBase<BaseEntity, BaseModel>();
+                .IncludeBase<BaseEntity, BaseModel>()
+                .ForMember(bm => bm.CreatorId, opt => opt.ResolveUsing(be => be.Creator == null ? be.DiscussionUserCreatorId : be.Creator.Id))
+                .ReverseMap();
 
             CreateMap<Message, MessageModel>()
-                .IncludeBase<BaseEntity, BaseModel>();
+                .IncludeBase<BaseEntity, BaseModel>()
+                .ReverseMap();
 
             CreateMap<Message, MessageModel>()
-                .IncludeBase<BaseEntity, BaseModel>();
+                .IncludeBase<BaseEntity, BaseModel>()
+                .ReverseMap();
 
 
         }
