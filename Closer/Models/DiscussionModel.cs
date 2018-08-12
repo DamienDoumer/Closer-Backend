@@ -8,7 +8,7 @@ namespace Closer.Models
 {
     public class DiscussionModel : BaseModel
     {
-        [MaxLength(30)]
+        [MaxLength(50)]
         [Required]
         public string Title { get; set; }
 

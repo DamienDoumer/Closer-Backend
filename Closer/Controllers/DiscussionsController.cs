@@ -54,7 +54,7 @@ namespace Closer.Controllers
             try
             {
                 var discussion = await _discussionDataService.ReadItemAsync(moniker);
-                if (discussion != null) return NotFound();
+                if (discussion == null) return NotFound();
 
                 var newDisc = _mapper.Map<Discussion>(discussionModel);
 
@@ -62,6 +62,8 @@ namespace Closer.Controllers
                 discussion.Description = newDisc.Description ?? discussion.Description;
 
                 await _discussionDataService.UpdateItem(discussion);
+
+                return Ok(discussion);
             }
             catch (Exception e)
             {
