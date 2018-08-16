@@ -1,4 +1,5 @@
 ﻿using Closer.Entities;
+using Closer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,17 +55,32 @@ namespace Closer.DataService.EF
 
         public async override Task<IEnumerable<Message>> ReadAllItemsAsync()
         {
-            return Context.Messages.ToList();
+            return Context.Messages.ToList().Select((msg) =>
+            {
+                msg.Sender = Context.Users.Find(msg.SenderId);
+                if (msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+                return msg;
+            }); 
         }
 
         public async override Task<Message> ReadItemAsync(string id)
         {
-            return await Context.Messages.FindAsync(Convert.ToInt32(id));
+            var msg = await Context.Messages.FindAsync(Convert.ToInt32(id));
+            msg.Sender = Context.Users.Find(msg.SenderId);
+                if (msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+            
+            return msg;
         }
 
         public async override Task<IEnumerable<Message>> ReadItemsAsync(int start)
         {
-            return Context.Messages.ToList().Skip(start).Take(PAGE_SIZE);
+            return Context.Messages.ToList().Skip(start).Take(Utilities.PAGE_SIZE)
+                .Select((msg) =>                
+                {
+                    msg.Sender = Context.Users.Find(msg.SenderId);
+                    if(msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+                    return msg;
+                });
         }
 
         public async override Task<Message> UpdateItem(Message item)

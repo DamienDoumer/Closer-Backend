@@ -1,4 +1,5 @@
-﻿using Closer.DataService;
+﻿using AutoMapper;
+using Closer.DataService;
 using Closer.DataService.EF;
 using Closer.Entities;
 using Closer.Filters;
@@ -18,9 +19,11 @@ namespace Closer.Controllers
     {
         IDataService<Message> _messageDataService;
         IDataService<Discussion> _discussionDataService;
+        IMapper _mapper;
 
-        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService)
+        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper)
         {
+            _mapper = mapper;
             _discussionDataService = discussionDataService;
             _messageDataService = messageDataService;
         }
@@ -34,7 +37,7 @@ namespace Closer.Controllers
                 if (message == null) return NotFound();
 
                 await _messageDataService.PersonalizedDeleteQuery(msg => msg.Id == Convert.ToInt32(messageMoniker));
-
+                return Ok();
             }
             catch (Exception e)
             {
@@ -43,6 +46,7 @@ namespace Closer.Controllers
 
             return BadRequest();
         }
+        
 
         [HttpGet()]
         public async Task<IActionResult> Get()
@@ -64,11 +68,24 @@ namespace Closer.Controllers
         [HttpPost()]
         public async Task<IActionResult> Post([FromBody]MessageModel messageModel)
         {
-            //Create a new dynamic url for the new resource added.
-            var newUri = Url.Link("GetUnicMessage",
-                new { conversationMoniker = messageModel.ConversationMoniker, messageMoniker = messageModel.Moniker });
+            try
+            {
+                var message = _mapper.Map<Message>(messageModel);
+                await _messageDataService.CreateItemAsync(message);
+                messageModel = _mapper.Map<MessageModel>(message);
 
-            return Created(newUri, messageModel);
+                //Create a new dynamic url for the new resource added.
+                var newUri = Url.Link("GetUnicMessage",
+                    new { conversationMoniker = messageModel.ConversationId, messageMoniker = messageModel.ID });
+
+                return Created(newUri, messageModel);
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("conversation/{conversationMoniker}/{messageMoniker}", Name = "GetUnicMessage")]

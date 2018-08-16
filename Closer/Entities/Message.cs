@@ -8,16 +8,16 @@ namespace Closer.Entities
 {
     public class Message : BaseEntity
     {
-        public int MessageUserId { get; set; }
-        public int MessageDiscussionId { get; set; }
-        public string InRespondToMessageID { get; set; }
+        public int SenderId { get; set; }
+        public int DiscussionId { get; set; }
+        public string RespondToMessageId { get; set; }
         public string Text { get; set; }
 
         /// <summary>
         /// Message this responds to.
         /// </summary>
         [NotMapped]
-        public Message RespondMessage { get; set; }
+        public Message RespondToMessage { get; set; }
         [NotMapped]
         public User Sender { get; set; }
     }

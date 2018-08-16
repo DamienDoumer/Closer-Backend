@@ -25,7 +25,7 @@ namespace Closer.DataService.EF
             var userDiscussion = Context.UserDiscussions.Where(x => x.UserId == item.Id);
             Context.UserDiscussions.RemoveRange(userDiscussion);
 
-            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageUserId == item.Id));
+            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.SenderId == item.Id));
             Context.Users.Remove(item);
             await Context.SaveChangesAsync();
 
