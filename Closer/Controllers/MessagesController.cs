@@ -112,7 +112,7 @@ namespace Closer.Controllers
         {
             try
             {
-                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.MessageDiscussionId == Convert.ToInt32(moniker)))
+                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.DiscussionId == Convert.ToInt32(moniker)))
                     .Skip(fromNumber).Take(Utilities.PAGE_SIZE);
 
                 return Ok(messages);

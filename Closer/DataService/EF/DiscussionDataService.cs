@@ -40,7 +40,7 @@ namespace Closer.DataService.EF
             var userDiscussion = Context.UserDiscussions.Where(x => x.DiscussionId == item.Id).ToList();
             Context.UserDiscussions.RemoveRange(userDiscussion);
 
-            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.MessageDiscussionId == item.Id));
+            Context.Messages.RemoveRange(Context.Messages.Where(msg => msg.DiscussionId == item.Id));
             Context.Discussions.Remove(item);
             await Context.SaveChangesAsync();
 
@@ -99,7 +99,7 @@ namespace Closer.DataService.EF
 
         public async override Task<IEnumerable<Discussion>> ReadItemsAsync(int start)
         {
-            return Context.Discussions.ToList().Skip(start).Take(Utilities.);
+            return Context.Discussions.ToList().Skip(start).Take((Utilities.PAGE_SIZE));
         }
 
         public async override Task<Discussion> UpdateItem(Discussion item)

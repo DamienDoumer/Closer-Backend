@@ -33,6 +33,8 @@ namespace Closer.Models
                 .ForMember(bm => bm.SenderId, opt => opt.ResolveUsing(be => be.Sender == null ? be.SenderId : be.Sender.Id))
                 .ReverseMap();
 
+            CreateMap<UserDiscussion, UserDiscussionModel>()
+                .ReverseMap();
         }
     }
 }

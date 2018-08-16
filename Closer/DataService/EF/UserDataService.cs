@@ -1,4 +1,5 @@
 ﻿using Closer.Entities;
+using Closer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,7 @@ namespace Closer.DataService.EF
 
         public async override Task<IEnumerable<User>> ReadItemsAsync(int start)
         {
-            return Context.Users.ToList().Skip(start).Take(PAGE_SIZE);
+            return Context.Users.ToList().Skip(start).Take(Utilities.PAGE_SIZE);
         }
 
         public async override Task<User> UpdateItem(User item)
