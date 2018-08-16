@@ -10,7 +10,6 @@ namespace Closer.DataService.EF
     {
         public string NewGuid =>  Guid.NewGuid().ToString();
         protected CloserContext Context { get; set; }
-        protected int PAGE_SIZE = 50;
 
         public BaseDataService(CloserContext context)
         {

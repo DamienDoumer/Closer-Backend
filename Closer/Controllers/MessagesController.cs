@@ -1,6 +1,8 @@
 ﻿using Closer.DataService;
+using Closer.DataService.EF;
 using Closer.Entities;
 using Closer.Filters;
+using Closer.Helpers;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,24 +17,48 @@ namespace Closer.Controllers
     public class MessagesController : BaseController
     {
         IDataService<Message> _messageDataService;
-        IDataService<Discussion> _duscussionDataService;
+        IDataService<Discussion> _discussionDataService;
 
         public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService)
         {
-            _duscussionDataService = discussionDataService;
+            _discussionDataService = discussionDataService;
             _messageDataService = messageDataService;
         }
 
         [HttpDelete("conversation/{conversationMoniker}/{messageMoniker}")]
         async Task<IActionResult> Delete(string conversationMoniker, string messageMoniker)
         {
-            return Ok();
+            try
+            {
+                var message = _messageDataService.ReadItemAsync(messageMoniker);
+                if (message == null) return NotFound();
+
+                await _messageDataService.PersonalizedDeleteQuery(msg => msg.Id == Convert.ToInt32(messageMoniker));
+
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
         }
 
         [HttpGet()]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok();
+            try
+            {
+                var messages = await _messageDataService.ReadAllItemsAsync();
+
+                return Ok(messages);
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
         }
 
         [HttpPost()]
@@ -48,15 +74,31 @@ namespace Closer.Controllers
         [HttpGet("conversation/{conversationMoniker}/{messageMoniker}", Name = "GetUnicMessage")]
         public IActionResult Get(string conversationMoniker, string messageMoniker)
         {
-            return Ok();
+            try
+            {
+                var message = _messageDataService.ReadItemAsync(messageMoniker);
+
+                if (message == null) return NotFound();
+
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("conversation/{moniker}")]
-        public IActionResult Get(string moniker, int fromNumber = 0)
+        public async Task<IActionResult> Get(string moniker, int fromNumber = 0)
         {
             try
             {
-                Ok("Conversation Uno");
+                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.MessageDiscussionId == Convert.ToInt32(moniker)))
+                    .Skip(fromNumber).Take(Utilities.PAGE_SIZE);
+
+                return Ok(messages);
             }
             catch (Exception e)
             {

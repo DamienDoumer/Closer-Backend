@@ -1,4 +1,5 @@
 ﻿using Closer.Entities;
+using Closer.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,7 +99,7 @@ namespace Closer.DataService.EF
 
         public async override Task<IEnumerable<Discussion>> ReadItemsAsync(int start)
         {
-            return Context.Discussions.ToList().Skip(start).Take(PAGE_SIZE);
+            return Context.Discussions.ToList().Skip(start).Take(Utilities.);
         }
 
         public async override Task<Discussion> UpdateItem(Discussion item)

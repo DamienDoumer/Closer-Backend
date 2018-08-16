@@ -1,4 +1,7 @@
-﻿using Closer.Filters;
+﻿using AutoMapper;
+using Closer.DataService;
+using Closer.Entities;
+using Closer.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,17 @@ namespace Closer.Controllers
     [Route("api/v1/user_discussion")]
     public class UserDiscussionController : BaseController
     {
+        IDataService<Discussion> _discussionDataService;
+        ISingleDataService<UserDiscussion> _userDiscussionDataService;
+        IMapper _mapper;
+
+        public UserDiscussionController(IDataService<Discussion> discussion, ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper) 
+        {
+            _mapper = mapper;
+            _userDiscussionDataService = userDiscussion;
+            _mapper = mapper;
+        }
+
         [HttpGet()]
         public IActionResult Get()
         {
@@ -24,9 +38,43 @@ namespace Closer.Controllers
         /// <param name="messageMoniker"></param>
         /// <returns></returns>
         [HttpDelete("conversation/{conversationMoniker}/{userMoniker}")]
-        async Task<IActionResult> Delete(string conversationMoniker, string userMoniker)
+        public async Task<IActionResult> Delete(string conversationMoniker, string userMoniker)
         {
-            return Ok();
+            try
+            {
+                await _userDiscussionDataService.PersonalizedDeleteQuery(d => (Convert.ToString(d.DiscussionId) == conversationMoniker && 
+                        Convert.ToString(d.UserId) == userMoniker));
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("conversation/{conversationMoniker}/{userMoniker}")]
+        public async Task<IActionResult> Post(string conversationMoniker, string userMoniker)
+        {
+            try
+            {
+                if ((await _userDiscussionDataService.PersonalizedQuery(d => (Convert.ToString(d.DiscussionId) == conversationMoniker &&
+                         Convert.ToString(d.UserId) == userMoniker))) != null) return BadRequest("This user is already into this conversation.");
+
+                await _userDiscussionDataService.CreateItemAsync(new UserDiscussion
+                    { UserId = Convert.ToInt32(userMoniker),
+                        DiscussionId = Convert.ToInt32(userMoniker) });
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest("Could not insert this user into this conversation.");
         }
     }
 }
