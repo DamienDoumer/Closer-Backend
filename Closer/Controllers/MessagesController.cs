@@ -125,12 +125,12 @@ namespace Closer.Controllers
             return BadRequest();
         }
 
-        [HttpGet("conversation/{moniker}")]
-        public async Task<IActionResult> Get(string moniker, int fromNumber = 0)
+        [HttpGet("conversation/{discussionMoniker}")]
+        public async Task<IActionResult> Get(string discussionMoniker, int fromNumber = 0)
         {
             try
             {
-                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.MessageDiscussionId == Convert.ToInt32(moniker)))
+                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.MessageDiscussionId == Convert.ToInt32(discussionMoniker)))
                     .Skip(fromNumber).Take(Utilities.PAGE_SIZE);
 
                 return Ok(messages);
