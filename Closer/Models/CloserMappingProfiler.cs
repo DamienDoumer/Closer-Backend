@@ -29,8 +29,9 @@ namespace Closer.Models
 
             CreateMap<Message, MessageModel>()
                 .IncludeBase<BaseEntity, BaseModel>()
-                .ForMember(bm => bm.RespondToMessageId, opt => opt.ResolveUsing(be => be.RespondToMessage == null ? be.RespondToMessageId : be.RespondToMessage.Id.ToString()))
-                .ForMember(bm => bm.SenderId, opt => opt.ResolveUsing(be => be.Sender == null ? be.SenderId : be.Sender.Id))
+                .ForMember(bm => bm.RespondToMessageId, opt => opt.ResolveUsing(be => be.RespondToMessage == null ? be.InRespondToMessageID : be.RespondToMessage.Id.ToString()))
+                .ForMember(bm => bm.SenderId, opt => opt.MapFrom(be => be.MessageUserId))
+                .ForMember(bm => bm.ConversationId, opt => opt.MapFrom(be => be.MessageDiscussionId))
                 .ReverseMap();
 
             CreateMap<UserDiscussion, UserDiscussionModel>()

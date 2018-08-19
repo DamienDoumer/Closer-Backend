@@ -16,6 +16,7 @@ namespace Closer.DataService.EF
 
         public override async Task<Message> CreateItemAsync(Message item)
         {
+            item.CreatedAt = DateTime.Now;
             var user = await Context.Messages.AddAsync(item);
             await Context.SaveChangesAsync();
 
@@ -57,8 +58,8 @@ namespace Closer.DataService.EF
         {
             return Context.Messages.ToList().Select((msg) =>
             {
-                msg.Sender = Context.Users.Find(msg.SenderId);
-                if (msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+                msg.Sender = Context.Users.Find(msg.MessageUserId);
+                if (msg.InRespondToMessageID != null) msg.RespondToMessage = Context.Messages.Find(msg.InRespondToMessageID);
                 return msg;
             }); 
         }
@@ -66,8 +67,8 @@ namespace Closer.DataService.EF
         public async override Task<Message> ReadItemAsync(string id)
         {
             var msg = await Context.Messages.FindAsync(Convert.ToInt32(id));
-            msg.Sender = Context.Users.Find(msg.SenderId);
-                if (msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+            msg.Sender = Context.Users.Find(msg.MessageUserId);
+                if (msg.InRespondToMessageID != null) msg.RespondToMessage = Context.Messages.Find(msg.InRespondToMessageID);
             
             return msg;
         }
@@ -77,8 +78,8 @@ namespace Closer.DataService.EF
             return Context.Messages.ToList().Skip(start).Take(Utilities.PAGE_SIZE)
                 .Select((msg) =>                
                 {
-                    msg.Sender = Context.Users.Find(msg.SenderId);
-                    if(msg.RespondToMessageId != null) msg.RespondToMessage = Context.Messages.Find(msg.RespondToMessageId);
+                    msg.Sender = Context.Users.Find(msg.MessageUserId);
+                    if(msg.InRespondToMessageID != null) msg.RespondToMessage = Context.Messages.Find(msg.InRespondToMessageID);
                     return msg;
                 });
         }

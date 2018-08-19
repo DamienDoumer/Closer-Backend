@@ -29,7 +29,7 @@ namespace Closer.Controllers
         }
 
         [HttpDelete("conversation/{conversationMoniker}/{messageMoniker}")]
-        async Task<IActionResult> Delete(string conversationMoniker, string messageMoniker)
+        public async Task<IActionResult> Delete(string conversationMoniker, string messageMoniker)
         {
             try
             {
@@ -46,7 +46,25 @@ namespace Closer.Controllers
 
             return BadRequest();
         }
-        
+
+        [HttpDelete("{messageMoniker}")]
+        public async Task<IActionResult> Delete(string messageMoniker)
+        {
+            try
+            {
+                var message = await _messageDataService.ReadItemAsync(messageMoniker);
+                if (message == null) return NotFound();
+
+                await _messageDataService.PersonalizedDeleteQuery(msg => msg.Id == Convert.ToInt32(messageMoniker));
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                ;
+            }
+
+            return BadRequest();
+        }
 
         [HttpGet()]
         public async Task<IActionResult> Get()
@@ -55,7 +73,7 @@ namespace Closer.Controllers
             {
                 var messages = await _messageDataService.ReadAllItemsAsync();
 
-                return Ok(messages);
+                return Ok(_mapper.Map<IEnumerable<MessageModel>>(messages));
             }
             catch (Exception e)
             {
@@ -72,13 +90,13 @@ namespace Closer.Controllers
             {
                 var message = _mapper.Map<Message>(messageModel);
                 await _messageDataService.CreateItemAsync(message);
-                messageModel = _mapper.Map<MessageModel>(message);
+                var msgModel = _mapper.Map<MessageModel>(message);
 
                 //Create a new dynamic url for the new resource added.
                 var newUri = Url.Link("GetUnicMessage",
-                    new { conversationMoniker = messageModel.ConversationId, messageMoniker = messageModel.ID });
+                    new { conversationMoniker = msgModel.ConversationId, messageMoniker = msgModel.ID });
 
-                return Created(newUri, messageModel);
+                return Created(newUri, msgModel);
             }
             catch (Exception e)
             {
@@ -112,7 +130,7 @@ namespace Closer.Controllers
         {
             try
             {
-                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.DiscussionId == Convert.ToInt32(moniker)))
+                var messages = (await _messageDataService.PersonalizedQuery(msg => msg.MessageDiscussionId == Convert.ToInt32(moniker)))
                     .Skip(fromNumber).Take(Utilities.PAGE_SIZE);
 
                 return Ok(messages);

@@ -8,9 +8,9 @@ namespace Closer.Entities
 {
     public class Message : BaseEntity
     {
-        public int SenderId { get; set; }
-        public int DiscussionId { get; set; }
-        public string RespondToMessageId { get; set; }
+        public int MessageUserId { get; set; }
+        public int MessageDiscussionId { get; set; }
+        public string InRespondToMessageID { get; set; }
         public string Text { get; set; }
 
         /// <summary>
