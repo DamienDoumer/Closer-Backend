@@ -25,6 +25,7 @@ namespace Closer.Controllers
             ISingleDataService<UserDiscussion> userDiscussionDataService,
             IMapper mapper, ILogger<UsersController> logger)
         {
+            _logger = logger;
             _mapper = mapper;
             _userDataService = userDataService;
             _userDiscussionDataService = userDiscussionDataService;
@@ -114,6 +115,9 @@ namespace Closer.Controllers
             {
                 var items = await _userDataService.ReadAllItemsAsync();
                 var users = _mapper.Map<IEnumerable<UserModel>>(items);
+
+                _logger.LogInformation("Success geting users");
+
                 return Ok(users);
             }
             catch (Exception e)

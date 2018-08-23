@@ -10,20 +10,24 @@ namespace Closer.Helpers
 {
     public class SQLServerLoggerProvider : ILoggerProvider
     {
-        string _connectionString;
+        private readonly Func<string, LogLevel, bool> _filter;
+        private string _connectionString;
 
-        public SQLServerLoggerProvider(string conString)
+        public SQLServerLoggerProvider(Func<string, LogLevel, bool> filter, string connectionStr)
         {
-            _connectionString = conString;
+            _filter = filter;
+            _connectionString = connectionStr;
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new SQLServerLogger(_connectionString);
+            return new SQLServerLogger(categoryName, _filter, _connectionString);
         }
 
         public void Dispose()
         {
+
         }
     }
 }
+

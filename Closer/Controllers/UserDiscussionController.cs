@@ -55,7 +55,7 @@ namespace Closer.Controllers
                 _logger.LogError($"Error occured while removing the user with moniker: {userMoniker} from conversation with moniker : {conversationMoniker}");
             }
 
-            _logger.LogWarning($"removing the user with moniker: {userMoniker} from conversation with moniker : {conversationMoniker} was not completed.");
+            _logger.LogWarning($"Removing the user with moniker: {userMoniker} from conversation with moniker : {conversationMoniker} was not completed.");
             return BadRequest();
         }
 
