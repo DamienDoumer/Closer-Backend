@@ -57,7 +57,7 @@ namespace Closer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddProvider(new MyLoggerProvider(Configuration["Data:DefaultConnection:ConnectionString"]));
+            loggerFactory.AddProvider(new SQLServerLoggerProvider(Configuration["Data:DefaultConnection:ConnectionString"]));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())

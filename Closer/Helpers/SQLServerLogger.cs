@@ -24,12 +24,14 @@ namespace Closer.Helpers
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return true;
+            return logLevel > LogLevel.None;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
             Exception exception, Func<TState, Exception, string> formatter)
         {
+            if (!IsEnabled(logLevel)) return;
+
             _sqlHelper.InsertLog(new EventLog
             {
                 Message = $"Event Name : {eventId.Name} ::: {formatter(state, exception)}",

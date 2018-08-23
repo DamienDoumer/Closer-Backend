@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Closer.Helpers
 {
-    public class MyLoggerProvider : ILoggerProvider
+    public class SQLServerLoggerProvider : ILoggerProvider
     {
-        private readonly ConcurrentDictionary<string, SQLServerLogger> _loggers = new ConcurrentDictionary<string, SQLServerLogger>();
         string _connectionString;
 
-        public MyLoggerProvider(string conString)
+        public SQLServerLoggerProvider(string conString)
         {
             _connectionString = conString;
         }
@@ -25,7 +24,6 @@ namespace Closer.Helpers
 
         public void Dispose()
         {
-            _loggers.Clear();
         }
     }
 }

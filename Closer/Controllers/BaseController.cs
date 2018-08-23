@@ -11,12 +11,6 @@ namespace Closer.Controllers
     public abstract class BaseController : Controller
     {
         public const string URLHELPER = "URLHELPER";
-        protected ILogger _logger;
-
-        public BaseController(ILogger logger)
-        {
-            _logger = logger;
-        }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

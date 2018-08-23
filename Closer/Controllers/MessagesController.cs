@@ -21,8 +21,9 @@ namespace Closer.Controllers
         IDataService<Message> _messageDataService;
         IDataService<Discussion> _discussionDataService;
         IMapper _mapper;
+        protected ILogger<MessagesController> _logger;
 
-        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper, ILogger logger) : base(logger)
+        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper, ILogger<MessagesController> logger)
         {
             _mapper = mapper;
             _discussionDataService = discussionDataService;

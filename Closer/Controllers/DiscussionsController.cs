@@ -19,9 +19,10 @@ namespace Closer.Controllers
         IDataService<Discussion> _discussionDataService;
         ISingleDataService<UserDiscussion> _userDiscussionDataService;
         IMapper _mapper;
+        ILogger<DiscussionsController> _logger;
 
         public DiscussionsController(IDataService<Discussion> discussionDataService,
-            ISingleDataService<UserDiscussion> userDiscussions, IMapper mapper, ILogger logger) : base(logger)
+            ISingleDataService<UserDiscussion> userDiscussions, IMapper mapper, ILogger<DiscussionsController> logger)
         {
             _discussionDataService = discussionDataService;
             _userDiscussionDataService = userDiscussions;

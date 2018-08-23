@@ -19,10 +19,11 @@ namespace Closer.Controllers
         IDataService<User> _userDataService;
         ISingleDataService<UserDiscussion> _userDiscussionDataService;
         IMapper _mapper;
+        protected ILogger<UsersController> _logger;
 
         public UsersController(IDataService<User> userDataService, 
             ISingleDataService<UserDiscussion> userDiscussionDataService,
-            IMapper mapper, ILogger logger) : base(logger)
+            IMapper mapper, ILogger<UsersController> logger)
         {
             _mapper = mapper;
             _userDataService = userDataService;

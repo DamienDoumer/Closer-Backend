@@ -18,9 +18,10 @@ namespace Closer.Controllers
         IDataService<Discussion> _discussionDataService;
         ISingleDataService<UserDiscussion> _userDiscussionDataService;
         IMapper _mapper;
+        protected ILogger<UserDiscussionController> _logger;
 
         public UserDiscussionController(IDataService<Discussion> discussion, 
-            ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper, ILogger logger) : base(logger)
+            ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper, ILogger<UserDiscussionController> logger) 
         {
             _mapper = mapper;
             _userDiscussionDataService = userDiscussion;
@@ -51,9 +52,10 @@ namespace Closer.Controllers
             }
             catch (Exception e)
             {
-                ;
+                _logger.LogError($"Error occured while removing the user with moniker: {userMoniker} from conversation with moniker : {conversationMoniker}");
             }
 
+            _logger.LogWarning($"removing the user with moniker: {userMoniker} from conversation with moniker : {conversationMoniker} was not completed.");
             return BadRequest();
         }
 
