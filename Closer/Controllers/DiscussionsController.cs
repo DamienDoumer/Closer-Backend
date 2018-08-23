@@ -4,6 +4,7 @@ using Closer.Entities;
 using Closer.Filters;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Closer.Controllers
         IMapper _mapper;
 
         public DiscussionsController(IDataService<Discussion> discussionDataService,
-            ISingleDataService<UserDiscussion> userDiscussions, IMapper mapper)
+            ISingleDataService<UserDiscussion> userDiscussions, IMapper mapper, ILogger logger) : base(logger)
         {
             _discussionDataService = discussionDataService;
             _userDiscussionDataService = userDiscussions;

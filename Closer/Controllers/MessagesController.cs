@@ -6,6 +6,7 @@ using Closer.Filters;
 using Closer.Helpers;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Closer.Controllers
         IDataService<Discussion> _discussionDataService;
         IMapper _mapper;
 
-        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper)
+        public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper, ILogger logger) : base(logger)
         {
             _mapper = mapper;
             _discussionDataService = discussionDataService;

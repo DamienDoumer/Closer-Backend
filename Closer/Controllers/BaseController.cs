@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,12 @@ namespace Closer.Controllers
     public abstract class BaseController : Controller
     {
         public const string URLHELPER = "URLHELPER";
+        protected ILogger _logger;
+
+        public BaseController(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

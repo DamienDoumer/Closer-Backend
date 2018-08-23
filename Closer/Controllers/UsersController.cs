@@ -4,6 +4,7 @@ using Closer.Entities;
 using Closer.Filters;
 using Closer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Closer.Controllers
 
         public UsersController(IDataService<User> userDataService, 
             ISingleDataService<UserDiscussion> userDiscussionDataService,
-            IMapper mapper)
+            IMapper mapper, ILogger logger) : base(logger)
         {
             _mapper = mapper;
             _userDataService = userDataService;

@@ -3,6 +3,7 @@ using Closer.DataService;
 using Closer.Entities;
 using Closer.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Closer.Controllers
         ISingleDataService<UserDiscussion> _userDiscussionDataService;
         IMapper _mapper;
 
-        public UserDiscussionController(IDataService<Discussion> discussion, ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper) 
+        public UserDiscussionController(IDataService<Discussion> discussion, 
+            ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper, ILogger logger) : base(logger)
         {
             _mapper = mapper;
             _userDiscussionDataService = userDiscussion;
