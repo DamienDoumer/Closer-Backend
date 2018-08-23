@@ -23,6 +23,7 @@ namespace Closer.Controllers
         public UserDiscussionController(IDataService<Discussion> discussion, 
             ISingleDataService<UserDiscussion> userDiscussion, IMapper mapper, ILogger<UserDiscussionController> logger) 
         {
+            _logger = logger;
             _mapper = mapper;
             _userDiscussionDataService = userDiscussion;
             _mapper = mapper;

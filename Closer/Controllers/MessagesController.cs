@@ -25,6 +25,7 @@ namespace Closer.Controllers
 
         public MessagesController(IDataService<Message> messageDataService, IDataService<Discussion> discussionDataService, IMapper mapper, ILogger<MessagesController> logger)
         {
+            _logger = logger;
             _mapper = mapper;
             _discussionDataService = discussionDataService;
             _messageDataService = messageDataService;
