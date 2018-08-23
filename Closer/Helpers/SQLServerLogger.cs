@@ -1,4 +1,5 @@
 ﻿using Closer.DataService.EF;
+using Closer.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,11 @@ namespace Closer.Helpers
 {
     public class SQLServerLogger : ILogger
     {
-        CloserContext _context;
+        SQLHelper _sqlHelper;
 
-        public SQLServerLogger(CloserContext context)
+        public SQLServerLogger(string conString)
         {
-            _context = context;
+            _sqlHelper = new SQLHelper(conString);
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -29,7 +30,7 @@ namespace Closer.Helpers
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
             Exception exception, Func<TState, Exception, string> formatter)
         {
-            _context.EventLogs.Add(new Entities.EventLog
+            _sqlHelper.InsertLog(new EventLog
             {
                 Message = $"Event Name : {eventId.Name} ::: {formatter(state, exception)}",
                 Source = typeof(TState).ToString(),

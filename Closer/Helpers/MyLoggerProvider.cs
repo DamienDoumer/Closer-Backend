@@ -11,16 +11,16 @@ namespace Closer.Helpers
     public class MyLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, SQLServerLogger> _loggers = new ConcurrentDictionary<string, SQLServerLogger>();
-        CloserContext _context;
+        string _connectionString;
 
-        public MyLoggerProvider(CloserContext context)
+        public MyLoggerProvider(string conString)
         {
-            _context = context;
+            _connectionString = conString;
         }
 
         public ILogger CreateLogger(string categoryName)
         {
-            return _loggers.GetOrAdd(categoryName, name => new SQLServerLogger(_context));
+            return new SQLServerLogger(_connectionString);
         }
 
         public void Dispose()

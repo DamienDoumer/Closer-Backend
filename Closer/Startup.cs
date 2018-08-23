@@ -26,13 +26,14 @@ namespace Closer
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        //This method gets called by the runtime. Use this method to add services to the container.
         public async void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper();
+
             services.AddDbContext<CloserContext>(opt => 
                 opt.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-
+            
             services.AddTransient<IDataService<User>>(x => 
                 new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             services.AddTransient<IDataService<Discussion>>(x =>
@@ -56,7 +57,8 @@ namespace Closer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddProvider(new MyLoggerProvider(app.ApplicationServices.GetService<CloserContext>()));
+            loggerFactory.AddProvider(new MyLoggerProvider(Configuration["Data:DefaultConnection:ConnectionString"]));
+            loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
