@@ -9,6 +9,7 @@ using Closer.Entities;
 using Closer.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +44,10 @@ namespace Closer
             services.AddTransient<IDataService<Message>>(x =>
                 new MessageDataService(services.BuildServiceProvider().GetService<CloserContext>()));
 
-            services.AddMvc()
+            services.AddMvc(opt =>
+            {
+                opt.Filters.Add(new RequireHttpsAttribute());
+            })
                 .AddJsonOptions(opt =>
                 {
                     //The best Json serializer settings 
