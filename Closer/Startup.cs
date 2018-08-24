@@ -20,12 +20,20 @@ namespace Closer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public IHostingEnvironment _hostingEnvironment;
+        public IConfiguration _configuration;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IHostingEnvironment environment)
+        {
+            _hostingEnvironment = environment;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(environment.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            _configuration = builder.Build();
+        }
 
         //This method gets called by the runtime. Use this method to add services to the container.
         public async void ConfigureServices(IServiceCollection services)
@@ -33,7 +41,7 @@ namespace Closer
             services.AddAutoMapper();
 
             services.AddDbContext<CloserContext>(opt => 
-                opt.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                opt.UseSqlServer(_configuration["Data:DefaultConnection:ConnectionString"]));
             
             services.AddTransient<IDataService<User>>(x => 
                 new UserDataService(services.BuildServiceProvider().GetService<CloserContext>()));
@@ -43,9 +51,13 @@ namespace Closer
                 new UserDiscussionDataService(services.BuildServiceProvider().GetService<CloserContext>()));
             services.AddTransient<IDataService<Message>>(x =>
                 new MessageDataService(services.BuildServiceProvider().GetService<CloserContext>()));
-
+             
             services.AddMvc(opt =>
             {
+                if(!_hostingEnvironment.IsProduction())
+                {
+                    opt.SslPort = 44382;
+                }
                 opt.Filters.Add(new RequireHttpsAttribute());
             })
                 .AddJsonOptions(opt =>
@@ -61,7 +73,7 @@ namespace Closer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddSQLServerLogger(LogLevel.Information, Configuration["Data:DefaultConnection:ConnectionString"]);
+            loggerFactory.AddSQLServerLogger(LogLevel.Information, _configuration["Data:DefaultConnection:ConnectionString"]);
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
